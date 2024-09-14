@@ -7,22 +7,20 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <!-- Lägg till aktuell vecka högst upp -->
     <div class="container">
         {% for day, info in week_data.items() %}
-            <!-- Rad för dag och event -->
             <div class="row">
-                <!-- Dagkolumn som sträcker sig över alla event -->
                 <div class="day-column">
                     <h2>{{ day }} {{ info.day_of_week | replace('Sunday', 'Söndag')
-                        | replace('Monday', 'Måndag')
-                        | replace('Tuesday', 'Tisdag')
-                        | replace('Wednesday', 'Onsdag')
-                        | replace('Thursday', 'Torsdag')
-                        | replace('Friday', 'Fredag')
-                        | replace('Saturday', 'Lördag') }}</h2>
+                                                      | replace('Monday', 'Måndag')
+                                                      | replace('Tuesday', 'Tisdag')
+                                                      | replace('Wednesday', 'Onsdag')
+                                                      | replace('Thursday', 'Torsdag')
+                                                      | replace('Friday', 'Fredag')
+                                                      | replace('Saturday', 'Lördag') }}</h2>
                 </div>
-    
-                <!-- Eventkolumner -->
+
                 <div class="event-container">
                     {% for task in info.tasks %}
                         <div class="task">{{ task }}</div>

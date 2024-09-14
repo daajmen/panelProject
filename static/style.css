@@ -52,3 +52,14 @@ body, html {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     font-size: 1.2rem; /* Öka textstorleken */
 }
+
+/* Stil för aktuell vecka högst upp */
+.week-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.week-header h1 {
+    font-size: 2rem; /* Gör texten större */
+    color: #f5f5f5;
+}

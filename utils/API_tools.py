@@ -10,7 +10,7 @@ def fetchCalendar():
     today = datetime.datetime.utcnow()
 
     # Beräkna 30 dagar framåt
-    end_date = today + datetime.timedelta(days=7)
+    end_date = today + datetime.timedelta(days=14)
 
     # Din Long-lived access token för autentisering
     headers = {
@@ -52,6 +52,7 @@ def fetchCalendar():
             # Lägg till både tid och beskrivning
             structured_data[event_date]['tasks'].append(f"{event_time} - {event['summary']}")
         
+
         return structured_data
     else:
         print(f"Fel: {response.status_code}")
