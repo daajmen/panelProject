@@ -16,12 +16,13 @@ body, html {
     color: #f5f5f5;
 }
 
-/* Rad som innehåller både dag och event */
+/* Justera avståndet mellan raderna och kolumnerna */
 .row {
     display: grid;
     grid-template-columns: 200px 1fr; /* 1 fast kolumn för dagen, 1 flexibel för events */
-    gap: 20px;
-    align-items: stretch; /* Se till att dagen sträcker sig över höjden av alla event */
+    gap: 20px; /* Lägg till mer utrymme mellan dag och event */
+    align-items: stretch;
+    margin-bottom: 20px; /* Lägg till mellanrum under varje rad */
 }
 
 /* Dagkolumn */
@@ -33,11 +34,11 @@ body, html {
     text-align: center;
 }
 
-/* Container för events */
+/* Justera event-container */
 .event-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Fler kolumner för events, dynamisk bredd */
-    gap: 10px;
+    gap: 20px; /* Lägg till mer utrymme mellan eventen */
 }
 
 /* Individuella events */
