@@ -8,17 +8,28 @@
 </head>
 <body>
     <div class="container">
-        <h1>Familjens Vecka</h1>
-        <div class="week">
-            {% for day, info in week_data.items() %}
-            <div class="day">
-                <h2>{{ day }} ({{ info.day_of_week }})</h2>  <!-- Lägg till veckodagen här -->
-                {% for task in info.tasks %}
-                <div class="task">{{ task }}</div>
-                {% endfor %}
+        {% for day, info in week_data.items() %}
+            <!-- Rad för dag och event -->
+            <div class="row">
+                <!-- Dagkolumn som sträcker sig över alla event -->
+                <div class="day-column">
+                    <h2>{{ day }} {{ info.day_of_week | replace('Sunday', 'Söndag')
+                        | replace('Monday', 'Måndag')
+                        | replace('Tuesday', 'Tisdag')
+                        | replace('Wednesday', 'Onsdag')
+                        | replace('Thursday', 'Torsdag')
+                        | replace('Friday', 'Fredag')
+                        | replace('Saturday', 'Lördag') }}</h2>
+                </div>
+    
+                <!-- Eventkolumner -->
+                <div class="event-container">
+                    {% for task in info.tasks %}
+                        <div class="task">{{ task }}</div>
+                    {% endfor %}
+                </div>
             </div>
-            {% endfor %}
-        </div>
+        {% endfor %}
     </div>
 </body>
 </html>
