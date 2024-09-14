@@ -28,7 +28,22 @@ def fetchCalendar():
 
     if response.status_code == 200:
         events = response.json()
-        return events
+        
+        # Strukturera datan
+        structured_data = {}
+        for event in events:
+            # Extrahera datum (dagens datum)
+            if 'dateTime' in event['start']:
+                event_date = event['start']['dateTime'][:10]  # YYYY-MM-DD format
+            else:
+                event_date = event['start']['date']  # För heldagshändelser
+
+            # Lägg till händelser till rätt dag
+            if event_date not in structured_data:
+                structured_data[event_date] = []
+            structured_data[event_date].append(event['summary'])
+        
+        return structured_data
     else:
         print(f"Fel: {response.status_code}")
         return None
