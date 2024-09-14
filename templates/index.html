@@ -10,10 +10,10 @@
     <div class="container">
         <h1>Familjens Vecka</h1>
         <div class="week">
-            {% for day, tasks in week_data.items() %}
+            {% for day, info in week_data.items() %}
             <div class="day">
-                <h2>{{ day }}</h2>
-                {% for task in tasks %}
+                <h2>{{ day }} ({{ info.day_of_week }})</h2>  <!-- Lägg till veckodagen här -->
+                {% for task in info.tasks %}
                 <div class="task">{{ task }}</div>
                 {% endfor %}
             </div>
