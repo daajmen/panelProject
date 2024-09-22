@@ -7,10 +7,14 @@ app = Flask(__name__)
 @app.route('/')
 def home():
 
-    weather_data = fetchHourlyWeather()
+    daily_weather = fetchHourlyWeather()
     week_data = fetchCalendar()
 
-    return render_template('index.html',week_data=week_data, weather_data=weather_data)
+    return render_template('index.html',week_data=week_data, weather_data= {
+        'current_temp': daily_weather.current_temp,
+        'max_temp': daily_weather.max_temp,
+        'min_temp': daily_weather.min_temp,
+        'condition': daily_weather.hourly_forecasts[0].condition})
 
 @app.route('/debug', methods=['GET', 'POST'])
 def debug():

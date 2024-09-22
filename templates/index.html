@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Familjens Vecka</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="{{ url_for('static', filename='/weather-icons.js') }}"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <script src="{{ url_for('static', filename='/weather-icons.js') }}"></script>    
+    <script src="{{ url_for('static', filename='/calendar.js') }}"></script>    
 </head>
 <body>
     <div class="main-container">
@@ -33,20 +33,41 @@
                 </div>
             {% endfor %}
         </div>
-        <!-- Väder och annat på höger sida -->
-        <div class="weather-widget">
-            <i class="material-icons weather-icon" id="weather-icon"></i>
-            <h3>Väder</h3>
-            <p>Temperatur: {{ weather_data.temperature }}°C</p>
-            <p>Läge på himmel: {{ weather_data.condition }}</p>
-            <p>Vind: {{ weather_data.wind_speed }} m/s</p>
+        <div class="sidebar"> 
+            <!-- Väder och annat på höger sida -->
+            <div class="weather-widget">
+                <span class="material-symbols-outlined weather-icon" id="weather-icon"></span>
+                <h3>Dagens forecast</h3>
+                <p>Aktuell temperatur: {{ weather_data.current_temp }}°C</p>
+                <p>Lägsta/högsta temperatur: {{ weather_data.min_temp }}°C / {{ weather_data.max_temp }}°C</p>
+            </div>
+            <div class="calendar-widget">
+                <h3 id="calendar-month"></h3>
+                <table class="calendar-table">
+                    <thead>
+                        <tr>
+                            <th>M</th>
+                            <th>T</th>
+                            <th>O</th>
+                            <th>T</th>
+                            <th>F</th>
+                            <th>L</th>
+                            <th>S</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendar-body">
+                        <!-- Här kommer datumen genereras -->
+                    </tbody>
+                </table>
+            </div>
         </div>
-        
+                
         <script>
             // Dynamiskt väderförhållande från servern
             const weatherCondition = "{{ weather_data.condition }}";
             updateWeatherIcon(weatherCondition);
-        </script>    </div>
+        </script>    
+    </div>
        
 </body>
 
