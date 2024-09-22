@@ -1,9 +1,17 @@
 /* Ställ in bakgrundsfärgen för hela sidan */
 body, html {
-    background-color: #1e1e1e; /* Mörk bakgrund */
+    background-color: #ffffff; /* Mörk bakgrund */
     margin: 0;
     padding: 0;
     height: 100%;
+}
+
+/* Layout för huvudcontainer */
+.main-container {
+    display: grid;
+    grid-template-columns: 3fr 1fr; /* 3 delar till kalender, 1 del till sidofält (väder) */
+    gap: 20px;
+    padding: 20px;
 }
 
 /* Container för hela layouten */
@@ -12,8 +20,30 @@ body, html {
     flex-direction: column;
     gap: 20px;
     padding: 20px;
-    background-color: #1e1e1e;
+    background-color: #ffffff;
     color: #f5f5f5;
+}
+
+/* Sidofält för väder och andra widgets */
+.sidebar {
+    background-color: rgba(23, 120, 199, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    color: #f5f5f5;
+}
+
+/* Väderwidget */
+.weather-widget {
+    background-color: rgba(23, 120, 199, 0.8);
+    padding: 15px;
+    border-radius: 8px;
+    color: #f5f5f5;
+    text-align: center;
+}
+
+.weather-icon {
+    font-size: 100px !important;
+    color: #ffffff; /* Anpassa färgen om du vill */
 }
 
 /* Justera avståndet mellan raderna och kolumnerna */
@@ -27,7 +57,7 @@ body, html {
 
 /* Dagkolumn */
 .day-column {
-    background-color: #333;
+    background-color: rgba(23, 120, 199, 0.8);
     padding: 10px;
     border-radius: 8px;
     color: #f5f5f5;

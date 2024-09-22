@@ -1,17 +1,16 @@
 from flask import Flask, render_template, request
-from utils.API_tools import fetchCalendar
+from utils.API_tools import fetchCalendar, fetchHourlyWeather
 from adb_scheduler import start_adb_scheduler  # Importera din ADB-logik
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    # Hämta kalenderdata dynamiskt
-    week_data = fetchCalendar()
-    
-    # Skicka kalenderdatan till din HTML-mall
-    return render_template('index.html', week_data=week_data)
 
+    weather_data = fetchHourlyWeather()
+    week_data = fetchCalendar()
+
+    return render_template('index.html',week_data=week_data, weather_data=weather_data)
 
 @app.route('/debug', methods=['GET', 'POST'])
 def debug():

@@ -5,29 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Familjens Vecka</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="{{ url_for('static', filename='/weather-icons.js') }}"></script>
+
 </head>
 <body>
-    <!-- Lägg till aktuell vecka högst upp -->
-    <div class="container">
-        {% for day, info in week_data.items() %}
-            <div class="row">
-                <div class="day-column">
-                    <h2>{{ day }} {{ info.day_of_week | replace('Sunday', 'Söndag')
-                                                      | replace('Monday', 'Måndag')
-                                                      | replace('Tuesday', 'Tisdag')
-                                                      | replace('Wednesday', 'Onsdag')
-                                                      | replace('Thursday', 'Torsdag')
-                                                      | replace('Friday', 'Fredag')
-                                                      | replace('Saturday', 'Lördag') }}</h2>
-                </div>
+    <div class="main-container">
 
-                <div class="event-container">
-                    {% for task in info.tasks %}
-                        <div class="task">{{ task }}</div>
-                    {% endfor %}
+        <div class="container"> 
+            {% for day, info in week_data.items() %}
+                <div class="row">
+                    <div class="day-column">
+                        <h2>{{ day }} {{ info.day_of_week | replace('Sunday', 'Söndag')
+                                                        | replace('Monday', 'Måndag')
+                                                        | replace('Tuesday', 'Tisdag')
+                                                        | replace('Wednesday', 'Onsdag')
+                                                        | replace('Thursday', 'Torsdag')
+                                                        | replace('Friday', 'Fredag')
+                                                        | replace('Saturday', 'Lördag') }}</h2>
+                    </div>
+
+                    <div class="event-container">
+                        {% for task in info.tasks %}
+                            <div class="task">{{ task }}</div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
+        <!-- Väder och annat på höger sida -->
+        <div class="weather-widget">
+            <i class="material-icons weather-icon" id="weather-icon"></i>
+            <h3>Väder</h3>
+            <p>Temperatur: {{ weather_data.temperature }}°C</p>
+            <p>Läge på himmel: {{ weather_data.condition }}</p>
+            <p>Vind: {{ weather_data.wind_speed }} m/s</p>
+        </div>
+        
+        <script>
+            // Dynamiskt väderförhållande från servern
+            const weatherCondition = "{{ weather_data.condition }}";
+            updateWeatherIcon(weatherCondition);
+        </script>    </div>
+       
 </body>
+
 </html>
