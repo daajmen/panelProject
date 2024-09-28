@@ -11,8 +11,10 @@ function generateCalendar() {
     document.getElementById('calendar-month').innerText = months[currentMonth] + ' ' + currentYear;
 
     // Skapa en ny Date för första dagen i månaden
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    let firstDay = new Date(currentYear, currentMonth, 1).getDay();
 
+    // Justera så att veckan börjar på måndag istället för söndag
+    firstDay = (firstDay === 0) ? 6 : firstDay - 1;
     // Antal dagar i månaden
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
