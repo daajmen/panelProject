@@ -60,6 +60,16 @@
                     </tbody>
                 </table>
             </div>
+            <div class='health-widget'> 
+                <h3> Status på Alexander</h3>
+                <p> Sömnstatus: {{health_data.sleep_status}}%</p>
+                <p> Jobbstatus: {{health_data.work_status}}%</p>
+                <p>Socialstatus: 
+                    Bra: {{ health_data.private_status[0] }}%, 
+                    Okej: {{ health_data.private_status[1] }}%, 
+                    Dålig: {{ health_data.private_status[2] }}%
+                </p>
+            </div>
         </div>
                 
         <script>

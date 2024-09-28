@@ -3,3 +3,4 @@ secret.py
 __pycache__/secret.cpython-312.pyc
 utils/__pycache__/API_tools.cpython-312.pyc
 utils/__pycache__/API_tools.cpython-312.pyc
+utils/__pycache__/handlerSQL.cpython-312.pyc
