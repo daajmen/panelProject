@@ -47,7 +47,7 @@ def fetch_healthresults():
                 total_no += 1 
 
         total = total_yes + total_no
-        procent = 100 if total_no == 0 else (total_yes / total) * 100
+        procent = 100 if total_no == 0 else round((total_yes / total) * 100, 1)
         return procent
     
     def calculate_private(data, positive_value, okay_value, negative_value):
@@ -75,9 +75,9 @@ def fetch_healthresults():
 
         # Beräkna procent om det finns en total
         if total > 0: 
-            good_percent = (total_good / total) * 100
-            okay_percent = (total_okay / total) * 100
-            bad_percent = (total_bad / total) * 100
+            good_percent = round((total_good / total) * 100, 1)
+            okay_percent = round((total_okay / total) * 100, 1)
+            bad_percent = round((total_bad / total) * 100, 1)
 
         # Returnera resultat som en tuple
         return good_percent, okay_percent, bad_percent
