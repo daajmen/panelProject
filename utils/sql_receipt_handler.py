@@ -25,7 +25,7 @@ def fetch_yearly_summaries(cursor, year):
 
         cursor.execute(query, (month_start, month_end))
         result = cursor.fetchone()[0]  # Hämtar summan, om ingen post finns blir det None
-        total_sum = result if result else 0  # Om resultatet är None, sätt till 0
+        total_sum = round(result,2) if result else 0  # Om resultatet är None, sätt till 0
 
         # Spara månadens summa och månadens namn
         monthly_summaries.append((month, total_sum))
