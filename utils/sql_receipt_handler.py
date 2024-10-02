@@ -1,4 +1,4 @@
-import sqlite3
+import psycopg2
 from datetime import datetime, timedelta
 
 def get_month_range(year, month):
@@ -20,12 +20,12 @@ def fetch_yearly_summaries(cursor, year):
         query = '''
             SELECT SUM(summa) as total_sum
             FROM receipts
-            WHERE datum BETWEEN ? AND ?
+            WHERE datum BETWEEN %s AND %s
         '''
 
         cursor.execute(query, (month_start, month_end))
         result = cursor.fetchone()[0]  # Hämtar summan, om ingen post finns blir det None
-        total_sum = round(result,2) if result else 0  # Om resultatet är None, sätt till 0
+        total_sum = round(result, 2) if result else 0  # Om resultatet är None, sätt till 0
 
         # Spara månadens summa och månadens namn
         monthly_summaries.append((month, total_sum))
@@ -33,8 +33,14 @@ def fetch_yearly_summaries(cursor, year):
     return monthly_summaries
 
 def present_data():
-    # Koppla upp till databasen
-    conn = sqlite3.connect('../receipts_db/receipt_database.db')
+    # Koppla upp till PostgreSQL-databasen
+    conn = psycopg2.connect(
+        host="192.168.50.16",  # T.ex. "localhost" eller IP-adress
+        database="receipts_database",
+        user="postgres",
+        password="password",
+        port=5432  # Standardporten för PostgreSQL
+    )
     cursor = conn.cursor()
 
     # Hämta aktuellt år
@@ -44,6 +50,7 @@ def present_data():
     monthly_summaries = fetch_yearly_summaries(cursor, current_year)
 
     # Stäng uppkopplingen
+    cursor.close()
     conn.close()
 
     return monthly_summaries
