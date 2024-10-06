@@ -61,6 +61,13 @@
                 </table>
             </div>
             <div class='health-widget'> 
+                <h3>Lunch för veckan</h3>
+                <p><strong>Måndag:</strong> {{lunch.måndag}}</p>
+                <p><strong>Tisdag:</strong> {{lunch.tisdag}}</p>
+                <p><strong>Onsdag:</strong>{{lunch.onsdag}}</p>
+                <p><strong>Torsdag:</strong> {{lunch.torsdag}}</p>
+                <p><strong>Fredag:</strong>{{lunch.fredag}}</p>
+
                 <h3> Status på Alexander</h3>
                 <p> Sömnstatus: {{health_data.sleep_status}}%</p>
                 <p> Jobbstatus: {{health_data.work_status}}%</p>
@@ -69,8 +76,6 @@
                     Okej: {{ health_data.private_status[1] }}%, 
                     Dålig: {{ health_data.private_status[2] }}%
                 </p>
-
-
 
                 <h3>Matkostnader för året</h3>
                 <p>Januari: {{ monthly_expenses.januari }} kr</p>
