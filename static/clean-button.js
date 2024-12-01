@@ -9,7 +9,7 @@ function sendButtonAction(action) {
     .then(response => response.json())
     .then(data => {
         console.log('Serverns svar:', data.message); // Logga svaret
-        alert(data.message); // Visa svar i en alert
+        //alert(data.message); // Visa svar i en alert
     })
     .catch(error => {
         console.error('Fel:', error);
