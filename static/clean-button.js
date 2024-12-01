@@ -20,7 +20,7 @@ function sendButtonAction(action) {
 function cleanLivingroom() {
     sendButtonAction('cleanLivingroom');
 }
-function cleanKitchen() {
+function cleanKitchen() {   
     sendButtonAction('cleanKitchen');
 }
 function cleanDiningroom() {
