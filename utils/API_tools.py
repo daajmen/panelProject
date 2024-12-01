@@ -119,3 +119,22 @@ def fetchHourlyWeather():
         return daily_weather
     else:
         print("Error fetching weather data")
+
+
+def activate_script(script_to_run):
+
+    url = "http://192.168.50.11:8123/api/services/script/turn_on"
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "content-type": "application/json",
+    }
+    data = {
+        "entity_id": script_to_run,
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+
+    if response.status_code == 200:
+        print('yep, script run')
+    else: 
+        print('failed.')

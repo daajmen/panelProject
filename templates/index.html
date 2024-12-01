@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <script src="{{ url_for('static', filename='/weather-icons.js') }}"></script>    
     <script src="{{ url_for('static', filename='/calendar.js') }}"></script>    
+    <script src="{{ url_for('static', filename='/clean-button.js') }}"></script>    
+
 </head>
 <body>
     <div class="main-container">
@@ -37,9 +39,16 @@
             <!-- Väder och annat på höger sida -->
             <div class="weather-widget">
                 <span class="material-symbols-outlined weather-icon" id="weather-icon"></span>
-                <h3>Dagens forecast</h3>
-                <p>Aktuell temperatur: {{ weather_data.current_temp }}°C</p>
-                <p>Lägsta/högsta temperatur: {{ weather_data.min_temp }}°C / {{ weather_data.max_temp }}°C</p>
+                <p>Temperatur just nu: {{ weather_data.current_temp }}°C</p>
+            </div>
+            <div class="app-widget">
+                <h3> Dammsugare controls </h3>
+                <div class="button-container">
+                    <button class="fancy-button"onclick="cleanLivingroom()">Städa vardagsrum</button>
+                    <button class="fancy-button"onclick="cleanKitchen()">Städa kök</button>
+                    <button class="fancy-button"onclick="cleanDiningroom()">Städa matsal</button>
+                    <button class="fancy-button"onclick="cleanAbort()">Avbryt, åk hem</button>
+                </div>
             </div>
             <div class="calendar-widget">
                 <h3 id="calendar-month"></h3>
@@ -97,6 +106,8 @@
             // Dynamiskt väderförhållande från servern
             const weatherCondition = "{{ weather_data.condition }}";
             updateWeatherIcon(weatherCondition);
+
+
         </script>    
     </div>
        

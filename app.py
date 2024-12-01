@@ -1,6 +1,6 @@
 import threading
 from flask import Flask, render_template, request
-from utils.API_tools import fetchCalendar, fetchHourlyWeather
+from utils.API_tools import fetchCalendar, fetchHourlyWeather, activate_script
 from adb_scheduler import start_adb_scheduler  # Importera din ADB-logik
 from utils.handlerSQL import fetch_database, fetch_healthresults  # Importera SQL-logiken från handlerSQL.py
 from utils.sql_receipt_handler import present_data
@@ -74,6 +74,29 @@ def debug():
         return f"ADB commands will run between {start_time} and {end_time} on IP: {ip}"
 
     return render_template('debug.html')
+
+@app.route('/api/clean', methods=['POST'])
+def clean():
+    data = request.json  # Få JSON-data från klienten
+    action = data.get('action')  # Läs vilken åtgärd som begärts
+    
+    # Hantera olika knapptryck
+    if action == 'cleanLivingroom':
+        activate_script('script.stada_vardagsrum')
+
+    elif action == 'cleanKitchen':
+        activate_script('script.stada_kok')
+
+    elif action == 'cleanDiningroom':
+        activate_script('script.stada_matsal')
+
+    elif action == 'cleanAbort':
+        activate_script('script.skicka_hem_dammsugare')
+    else:
+        return {'status': 'error', 'message': 'Okänd åtgärd'}, 400
+    
+    # Returnera svar till frontend
+    return {'status': 'success', 'message': f"Åtgärden '{action}' har utförts."}
 
 
 if __name__ == '__main__':
