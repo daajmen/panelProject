@@ -6,28 +6,39 @@ body, html {
     height: 100%;
 }
 
-/* Layout för huvudcontainer */
+/*Huvud container*/
 .main-container {
     display: grid;
-    grid-template-columns: 3fr 1fr; /* 3 delar till kalender, 1 del till sidofält (väder) */
-    gap: 20px;
+    grid-template-columns: 2fr 1fr 1fr; /* Tre kolumner: container, app-container, sidebar */
+    gap: 20px; /* Utrymme mellan kolumner */
     padding: 20px;
 }
 
-/* Container för hela layouten */
+/*Kalender container*/
 .container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-    background-color: #ffffff;
-    color: #f5f5f5;
+    grid-column: 1 / 2; /* Första kolumnen */
+    background-color: #fdfdfd00; /* Exempel på bakgrundsfärg */
+    padding: 10px;
+    border-radius: 8px;
 }
 
-/* Sidofält för väder och andra widgets */
+/*Knapp/app container*/
+.app-container {
+    grid-column: 2 / 3; /* Placera i andra kolumnen */
+    justify-self: end; /* Flytta den till höger inom sin kolumn */
+    gap: 20px; /* Utrymme mellan knapparna */
+    background-color: rgba(200, 200, 200, 0); /* Bakgrundsfärg */
+    padding: 10px;
+    border-radius: 4px;
+    text-align: right;
+    width: 100px; /* Sätter en smalare bredd för hela containern */    
+}
+
+/*Sidebar container*/
 .sidebar {
-    background-color: rgba(15, 75, 124, 0.8);
-    padding: 20px;
+    grid-column: 3 / 4; /* Tredje kolumnen */
+    background-color: rgba(15, 75, 124, 0.8); /* Exempel på bakgrundsfärg */
+    padding: 10px;
     border-radius: 8px;
     color: #f5f5f5;
 }
@@ -36,7 +47,7 @@ body, html {
 .weather-widget {
     background-color: rgba(23, 120, 199, 0.8);
     padding: 10px;
-    height: 10%;
+    height: 15%;
     border-radius: 8px;
     color: #f5f5f5;
     text-align: center;
@@ -171,3 +182,33 @@ body, html {
     box-shadow: 0 2px #474747;
 }
 
+
+.app {
+    background-color: rgba(23, 120, 199, 0.8);
+    width: 100px; /* Öka knappens bredd */
+    height: 100px; /* Öka knappens höjd */
+    padding: 5px; /* Mindre padding */
+    border-radius: 8px;
+    text-align: right; /* Centrera horisontellt */
+    display: flex; /* Flexbox för bättre kontroll */
+    justify-content: center; /* Centrera ikonen horisontellt */
+    align-items: center; /* Centrera ikonen vertikalt */
+    margin-bottom: 10px; /* Mellanrum mellan knappar */
+}
+
+
+.app:hover {
+    background-color: #474747;
+    transform: translateY(-2px);
+    box-shadow: 0 6px #00328f;
+}
+
+.app:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px #474747;
+}
+
+.material-symbols-outlined {
+    font-size: 150px; /* Justera storleken här */
+    color: white; /* Om du vill ändra färgen */
+}
