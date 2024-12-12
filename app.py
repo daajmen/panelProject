@@ -1,6 +1,6 @@
 import threading
 from flask import Flask, render_template, request
-from utils.API_tools import fetchCalendar, fetchHourlyWeather, activate_script
+from utils.API_tools import fetchCalendar, fetchHourlyWeather, activate_script,fetch_value
 from adb_scheduler import start_adb_scheduler  # Importera din ADB-logik
 from utils.handlerSQL import fetch_database, fetch_healthresults  # Importera SQL-logiken från handlerSQL.py
 from utils.sql_receipt_handler import present_data
@@ -19,6 +19,8 @@ def command_line_interface():
         elif command == "avsluta":
             print("Stänger ner CLI...") 
             break
+        elif command == 'test fetch':
+            print(fetch_value('sensor.furulundsvagen_5a_elpris'))
         else:
             print("Ogiltigt kommando.")
 
@@ -31,6 +33,8 @@ def home():
     health_data = fetch_healthresults()
     monthly_summaries = present_data()
     lunch_week = fetch_skolmat()
+    electric_price = fetch_value('sensor.furulundsvagen_5a_elpris')
+    hanna_carBattery = fetch_value('sensor.battery_level')
     
     return render_template('index.html',week_data=week_data, 
         weather_data= {'current_temp': daily_weather.current_temp,
@@ -59,7 +63,9 @@ def home():
             'tisdag' : lunch_week['rätt_2'],
             'onsdag' : lunch_week['rätt_3'],
             'torsdag' : lunch_week['rätt_4'],
-            'fredag' : lunch_week['rätt_5']})
+            'fredag' : lunch_week['rätt_5']},
+        elpris = {'actual_price' : electric_price},
+        hanna_bil = {'battery' : hanna_carBattery})
 
 @app.route('/debug', methods=['GET', 'POST'])
 def debug():

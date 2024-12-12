@@ -138,3 +138,19 @@ def activate_script(script_to_run):
         print('yep, script run')
     else: 
         print('failed.')
+
+def fetch_value(entity):
+
+    url = f"http://192.168.50.11:8123/api/states/{entity}"
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "content-type": "application/json",
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        data = response.json()
+        return data['state']
+    else: 
+        print('failed.')

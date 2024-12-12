@@ -36,6 +36,12 @@
             {% endfor %}
         </div>
         <div class="app-container">
+            <button class="app">
+                <h3> {{elpris.actual_price}} KR </h3>
+            </button>    
+            <button class="app">
+                <h3> BIL {{hanna_bil.battery}} % </h3>
+            </button>                         
             <button class="app"onclick="cleanLivingroom()">
                 <span class="material-symbols-outlined">weekend</span>
             </button>
@@ -47,7 +53,8 @@
             </button>
             <button class="app"onclick="cleanAbort()">
                 <span class="material-symbols-outlined">undo</span>
-            </button>            
+            </button>
+                        
         </div>
         <div class="sidebar"> 
             <!-- Väder och annat på höger sida -->
