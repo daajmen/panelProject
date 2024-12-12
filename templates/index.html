@@ -40,7 +40,8 @@
                 <h3> {{elpris.actual_price}} KR </h3>
             </button>    
             <button class="app">
-                <h3> BIL {{hanna_bil.battery}} % </h3>
+                <span id="hanna-battery-icon" class="material-symbols-outlined"></span>
+                <h3> BIL {{ hanna_bil.battery }} % </h3>
             </button>                         
             <button class="app"onclick="cleanLivingroom()">
                 <span class="material-symbols-outlined">weekend</span>
@@ -120,6 +121,15 @@
             const weatherCondition = "{{ weather_data.condition }}";
             updateWeatherIcon(weatherCondition);
 
+            // Dynamiskt väderförhållande från servern
+            const batteryIcon = "{{ hanna_bil.battery }}";
+            function updateBatteryIcon(value) {
+                if (value >= 95) return "battery_full";
+                const step = Math.ceil(value / 10); // Dela upp batteri i steg på 10%
+                return `battery_${step}_bar`;       // Returnerar exempelvis battery_6_bar
+            }
+            // Uppdatera batteri-ikonen i DOM
+            document.getElementById("hanna-battery-icon").innerText = updateBatteryIcon(batteryIcon);                        
 
         </script>    
     </div>
