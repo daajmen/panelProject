@@ -1,6 +1,5 @@
 import psycopg2
 from psycopg2 import sql
-from secret import DB_KEY
 
 def get_connection():
     return psycopg2.connect(
