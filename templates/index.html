@@ -99,20 +99,6 @@
                     Okej: {{ health_data.private_status[1] }}%, 
                     Dålig: {{ health_data.private_status[2] }}%
                 </p>
-
-                <h3>Matkostnader för året</h3>
-                <p>Januari: {{ monthly_expenses.januari }} kr</p>
-                <p>Februari: {{ monthly_expenses.februari }} kr</p>
-                <p>Mars: {{ monthly_expenses.mars }} kr</p>
-                <p>April: {{ monthly_expenses.april }} kr</p>
-                <p>Maj: {{ monthly_expenses.maj }} kr</p>
-                <p>Juni: {{ monthly_expenses.juni }} kr</p>
-                <p>Juli: {{ monthly_expenses.juli }} kr</p>
-                <p>Augusti: {{ monthly_expenses.augusti }} kr</p>
-                <p>September: {{ monthly_expenses.september }} kr</p>
-                <p>Oktober: {{ monthly_expenses.oktober }} kr</p>
-                <p>November: {{ monthly_expenses.november }} kr</p>
-                <p>December: {{ monthly_expenses.december }} kr</p>
             </div>
         </div>
                 
@@ -125,9 +111,11 @@
             const batteryIcon = "{{ hanna_bil.battery }}";
             function updateBatteryIcon(value) {
                 if (value >= 95) return "battery_full";
-                const step = Math.ceil(value / 10); // Dela upp batteri i steg på 10%
-                return `battery_${step}_bar`;       // Returnerar exempelvis battery_6_bar
-            }
+                if (value <= 10) return "battery_alert";
+                
+                const step = Math.min(6, Math.ceil(value / 10)); // Begränsa stegen till max 6
+                return `battery_${step}_bar`; // Returnerar exempelvis battery_6_bar
+            }            
             // Uppdatera batteri-ikonen i DOM
             document.getElementById("hanna-battery-icon").innerText = updateBatteryIcon(batteryIcon);                        
 

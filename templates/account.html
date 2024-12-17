@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kontobalans</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Kontobalans</h1>
+
+    <!-- Formulär för att lägga till nya poster -->
+    <form method="POST">
+        <label for="date">Datum:</label>
+        <input type="date" id="date" name="date" required><br>
+
+        <label for="food_account">Matkonto:</label>
+        <input type="number" id="food_account" name="food_account" step="0.01"><br>
+
+        <label for="buffer">Buffert:</label>
+        <input type="number" id="buffer" name="buffer" step="0.01"><br>
+
+        <button type="submit">Spara</button>
+    </form>
+
+    <!-- Graf för att visa data -->
+    <h2>Graf över Kontobalans</h2>
+    <canvas id="balanceChart" width="400" height="200"></canvas>
+
+    <script>
+        const data = {{ balances | tojson }};
+        const labels = data.map(item => item[0]); // Datum
+        const matkonto = data.map(item => item[1]); // Matkonto
+        const buffert = data.map(item => item[2]); // Buffert
+
+        // Sätt dagens datum som standardvärde
+        document.getElementById('date').valueAsDate = new Date();
+        const ctx = document.getElementById('balanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Matkonto',
+                        data: matkonto,
+                        borderColor: 'blue',
+                        fill: false,
+                        spanGaps: true // Hoppa över NULL-värden
+                    },
+                    {
+                        label: 'Buffert',
+                        data: buffert,
+                        borderColor: 'green',
+                        fill: false,
+                        spanGaps: true // Hoppa över NULL-värden
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: 'Datum' } },
+                    y: { title: { display: true, text: 'Saldo (SEK)' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

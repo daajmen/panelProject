@@ -5,6 +5,7 @@ from adb_scheduler import start_adb_scheduler  # Importera din ADB-logik
 from utils.handlerSQL import fetch_database, fetch_healthresults  # Importera SQL-logiken från handlerSQL.py
 from utils.sql_receipt_handler import present_data
 from utils.api_skolmaten import fetch_skolmat
+from utils.sql_money import insert_accountbalance, create_database, get_connection
 
 app = Flask(__name__)
 
@@ -13,14 +14,8 @@ def command_line_interface():
     while True:
         command = input("Skriv ett kommando (fetch, avsluta): ")
         
-        if command == "fetchsql":
-            present_data(); 
-            print('Har kört kommando')
-        elif command == "avsluta":
-            print("Stänger ner CLI...") 
-            break
-        elif command == 'test fetch':
-            print(fetch_value('sensor.furulundsvagen_5a_elpris'))
+        if command == "create_db":
+            create_database()
         else:
             print("Ogiltigt kommando.")
 
@@ -31,7 +26,6 @@ def home():
     daily_weather = fetchHourlyWeather()
     week_data = fetchCalendar()
     health_data = fetch_healthresults()
-    monthly_summaries = present_data()
     lunch_week = fetch_skolmat()
     electric_price = fetch_value('sensor.furulundsvagen_5a_elpris')
     hanna_carBattery = fetch_value('sensor.battery_level')
@@ -45,19 +39,6 @@ def home():
         health_data= {'work_status': health_data.work_status,
                       'sleep_status': health_data.sleep_status, 
                       'private_status': health_data.private_status},
-        monthly_expenses = {
-            'januari': monthly_summaries[0][1],
-            'februari': monthly_summaries[1][1],
-            'mars': monthly_summaries[2][1],
-            'april': monthly_summaries[3][1],
-            'maj': monthly_summaries[4][1],
-            'juni': monthly_summaries[5][1],
-            'juli': monthly_summaries[6][1],
-            'augusti': monthly_summaries[7][1],
-            'september': monthly_summaries[8][1],
-            'oktober': monthly_summaries[9][1],
-            'november': monthly_summaries[10][1],
-            'december': monthly_summaries[11][1]},
         lunch = {
             'måndag' : lunch_week['rätt_1'],
             'tisdag' : lunch_week['rätt_2'],
@@ -80,6 +61,25 @@ def debug():
         return f"ADB commands will run between {start_time} and {end_time} on IP: {ip}"
 
     return render_template('debug.html')
+
+@app.route('/account', methods=['GET', 'POST'])
+def account():
+    if request.method == 'POST':
+        date = request.form.get('date')
+        food_account = request.form.get('food_account') or None
+        buffer = request.form.get('buffer') or None
+
+        insert_accountbalance(date, food_account, buffer)
+
+    # Hämta all data för grafen
+    with get_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT datum, matkonto, buffert FROM account_balance ORDER BY datum")
+            data = cursor.fetchall()
+
+    # Skicka datan som en lista till frontend
+    return render_template('account.html', balances=data)
+
 
 @app.route('/api/clean', methods=['POST'])
 def clean():
