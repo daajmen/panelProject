@@ -26,7 +26,7 @@ def home():
     daily_weather = fetchHourlyWeather()
     week_data = fetchCalendar()
     health_data = fetch_healthresults()
-    lunch_week = fetch_skolmat()
+    lunch_week = fetch_skolmat() or {}
     electric_price = fetch_value('sensor.furulundsvagen_5a_elpris')
     hanna_carBattery = fetch_value('sensor.battery_level')
     
@@ -39,12 +39,13 @@ def home():
         health_data= {'work_status': health_data.work_status,
                       'sleep_status': health_data.sleep_status, 
                       'private_status': health_data.private_status},
-        lunch = {
-            'måndag' : lunch_week['rätt_1'],
-            'tisdag' : lunch_week['rätt_2'],
-            'onsdag' : lunch_week['rätt_3'],
-            'torsdag' : lunch_week['rätt_4'],
-            'fredag' : lunch_week['rätt_5']},
+        lunch= {
+            'måndag': lunch_week.get('rätt_1', 'Ingen information'),
+            'tisdag': lunch_week.get('rätt_2', 'Ingen information'),
+            'onsdag': lunch_week.get('rätt_3', 'Ingen information'),
+            'torsdag': lunch_week.get('rätt_4', 'Ingen information'),
+            'fredag': lunch_week.get('rätt_5', 'Ingen information')},
+
         elpris = {'actual_price' : electric_price},
         hanna_bil = {'battery' : hanna_carBattery})
 
