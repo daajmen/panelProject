@@ -67,7 +67,7 @@
             <div class="account">
                 <h3>Buffertkonto</h3>
                 <p>
-                    <strong>Senast:</strong> 
+                    <strong>Saldo:</strong> 
                     <span class="{{ 'positive' if account_data.latest_buffert >= 0 else 'negative' }}">
                         {{ account_data.latest_buffert }} kr
                     </span>
@@ -82,7 +82,7 @@
             <div class="account">
                 <h3>Matkonto</h3>
                 <p>
-                    <strong>Senast:</strong> 
+                    <strong>Saldo:</strong> 
                     <span class="{{ 'positive' if account_data.latest_matkonto >= 0 else 'negative' }}">
                         {{ account_data.latest_matkonto }} kr
                     </span>
