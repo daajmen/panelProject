@@ -42,7 +42,7 @@ function generateCalendar() {
 
                 // Markera dagens datum
                 if (date === currentDate) {
-                    cell.style.backgroundColor = '#3bff7c';  // Färga dagens datum gult
+                    cell.style.backgroundColor = '#000000';  // Färga dagens datum gult
                 }
 
                 date++;

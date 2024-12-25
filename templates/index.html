@@ -37,13 +37,14 @@
         </div>
         <div class="app-container">
             <button class="app">
+                <h3> Elpris:</h3>
                 <h3> {{elpris.actual_price}} KR </h3>
             </button>    
             <button class="app">
                 <span id="hanna-battery-icon" class="material-symbols-outlined"></span>
                 <h3> BIL {{ hanna_bil.battery }} % </h3>
             </button>                         
-            <button class="app"onclick="cleanLivingroom()">
+            <button class="app"onclick="cleanLivingroom()"> 
                 <span class="material-symbols-outlined">weekend</span>
             </button>
             <button class="app"onclick="cleanDiningroom()">
@@ -55,7 +56,6 @@
             <button class="app"onclick="cleanAbort()">
                 <span class="material-symbols-outlined">undo</span>
             </button>
-                        
         </div>
         <div class="sidebar"> 
             <!-- Väder och annat på höger sida -->
@@ -64,7 +64,37 @@
                 <p>Temperatur just nu: {{ weather_data.current_temp }}°C </p>
                 <p>Min: {{ weather_data.min_temp }}°C / Max: {{ weather_data.max_temp }}°C</p>
             </div>
-            <div class="calendar-widget">
+            <div class="account">
+                <h3>Buffertkonto</h3>
+                <p>
+                    <strong>Senast:</strong> 
+                    <span class="{{ 'positive' if account_data.latest_buffert >= 0 else 'negative' }}">
+                        {{ account_data.latest_buffert }} kr
+                    </span>
+                </p>
+                <p>
+                    <strong>Medelvärde (7 dagar):</strong> 
+                    <span class="{{ 'positive' if account_data.buffert_avg >= 0 else 'negative' }}">
+                        {{ account_data.buffert_avg }} kr
+                    </span>
+                </p>
+            </div>
+            <div class="account">
+                <h3>Matkonto</h3>
+                <p>
+                    <strong>Senast:</strong> 
+                    <span class="{{ 'positive' if account_data.latest_matkonto >= 0 else 'negative' }}">
+                        {{ account_data.latest_matkonto }} kr
+                    </span>
+                </p>
+                <p>
+                    <strong>Medelvärde (7 dagar):</strong> 
+                    <span class="{{ 'positive' if account_data.matkonto_avg >= 0 else 'negative' }}">
+                        {{ account_data.matkonto_avg }} kr
+                    </span>
+                </p>
+            </div>
+                        <div class="calendar-widget">
                 <h3 id="calendar-month"></h3>
                 <table class="calendar-table">
                     <thead>

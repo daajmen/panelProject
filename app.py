@@ -5,7 +5,8 @@ from adb_scheduler import start_adb_scheduler  # Importera din ADB-logik
 from utils.handlerSQL import fetch_database, fetch_healthresults  # Importera SQL-logiken från handlerSQL.py
 from utils.sql_receipt_handler import present_data
 from utils.api_skolmaten import fetch_skolmat
-from utils.sql_money import insert_accountbalance, create_database, get_connection
+from utils.sql_money import insert_accountbalance, create_database, get_connection, calculate_last_7_days
+
 
 app = Flask(__name__)
 
@@ -29,6 +30,7 @@ def home():
     lunch_week = fetch_skolmat() or {}
     electric_price = fetch_value('sensor.furulundsvagen_5a_elpris')
     hanna_carBattery = fetch_value('sensor.battery_level')
+    matkonto_avg, buffert_avg, latest_matkonto, latest_buffert = calculate_last_7_days()
     
     return render_template('index.html',week_data=week_data, 
         weather_data= {'current_temp': daily_weather.current_temp,
@@ -47,7 +49,13 @@ def home():
             'fredag': lunch_week.get('rätt_5', 'Ingen information')},
 
         elpris = {'actual_price' : electric_price},
-        hanna_bil = {'battery' : hanna_carBattery})
+        hanna_bil = {'battery' : hanna_carBattery},
+        account_data = {
+            'matkonto_avg': matkonto_avg,
+            'buffert_avg': buffert_avg,
+            'latest_matkonto': latest_matkonto,
+            'latest_buffert': latest_buffert
+        })
 
 @app.route('/debug', methods=['GET', 'POST'])
 def debug():
