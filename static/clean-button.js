@@ -29,4 +29,7 @@ function cleanDiningroom() {
 function cleanAbort() {
     sendButtonAction('cleanAbort');
 }
+function cleanLowerFloor() {
+    sendButtonAction('cleanLowerFloor');
+}
 

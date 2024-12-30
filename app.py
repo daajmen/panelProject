@@ -107,6 +107,9 @@ def clean():
 
     elif action == 'cleanAbort':
         activate_script('script.skicka_hem_dammsugare')
+
+    elif action == 'cleanLowerFloor':
+        activate_script('script.stada_nedre_vaning')
     else:
         return {'status': 'error', 'message': 'Okänd åtgärd'}, 400
     
