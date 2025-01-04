@@ -1,25 +1,14 @@
 import threading
+import pandas as pd 
 from flask import Flask, render_template, request
 from utils.API_tools import fetchCalendar, fetchHourlyWeather, activate_script,fetch_value
 from adb_scheduler import start_adb_scheduler  # Importera din ADB-logik
 from utils.handlerSQL import fetch_database, fetch_healthresults  # Importera SQL-logiken från handlerSQL.py
 from utils.sql_receipt_handler import present_data
 from utils.api_skolmaten import fetch_skolmat
-from utils.sql_money import insert_accountbalance, create_database, get_connection, calculate_last_7_days
-
+from utils.sql_money import insert_accountbalance, create_database, get_connection, calculate_last_7_days, insert_household, get_household_data
 
 app = Flask(__name__)
-
-# CLI-loop för att hantera terminalkommandon
-def command_line_interface():
-    while True:
-        command = input("Skriv ett kommando (fetch, avsluta): ")
-        
-        if command == "create_db":
-            create_database()
-        else:
-            print("Ogiltigt kommando.")
-
 
 @app.route('/')
 def home():
@@ -71,24 +60,6 @@ def debug():
 
     return render_template('debug.html')
 
-@app.route('/account', methods=['GET', 'POST'])
-def account():
-    if request.method == 'POST':
-        date = request.form.get('date')
-        food_account = request.form.get('food_account') or None
-        buffer = request.form.get('buffer') or None
-
-        insert_accountbalance(date, food_account, buffer)
-
-    # Hämta all data för grafen
-    with get_connection() as conn:
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT datum, matkonto, buffert FROM account_balance ORDER BY datum")
-            data = cursor.fetchall()
-
-    # Skicka datan som en lista till frontend
-    return render_template('account.html', balances=data)
-
 
 @app.route('/api/clean', methods=['POST'])
 def clean():
@@ -116,10 +87,66 @@ def clean():
     # Returnera svar till frontend
     return {'status': 'success', 'message': f"Åtgärden '{action}' har utförts."}
 
+@app.route('/account', methods=['GET', 'POST'])
+def account():
+    if request.method == 'POST':
+        date = request.form.get('date')
+        food_account = request.form.get('food_account') or None
+        buffer = request.form.get('buffer') or None
+
+        insert_accountbalance(date, food_account, buffer)
+
+    # Hämta all data för grafen
+    with get_connection('account_balance') as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT datum, matkonto, buffert FROM account_balance ORDER BY datum")
+            data = cursor.fetchall()
+
+    # Skicka datan som en lista till frontend
+    return render_template('account.html', balances=data)
+
+@app.route('/budget', methods=['GET', 'POST'])
+def budget(): 
+    if request.method == 'POST':
+        date = request.form.get('date')
+        label = request.form.get('label')
+        person = request.form.get('person')
+        description = request.form.get('description')
+        amount = request.form.get('amount')
+
+        insert_household(date, label, person, description, amount)
+    
+    df = get_household_data()
+
+    # Summera totals och kategorier
+    total_income = df[df['label'] == 'income']['amount'].sum()
+    total_mortgage = df[df['label'] == 'mortgage']['amount'].sum()
+    #total_insurance = df[df['label'] == 'insurance']['amount'].sum()
+    #total_waterbill = df[df['label'] == 'waterbill']['amount'].sum()
+
+    # Strukturera data
+    budget_data = {
+        'totals': {
+            'income': total_income,
+            'expenses': total_mortgage ,#+ total_insurance + total_waterbill,
+        },
+        'categories': {
+            'income': total_income,
+            'mortgage': total_mortgage,
+            'insurance': '',#total_insurance,
+            'waterbill': '',#total_waterbill,
+            'food': '',#df[df['label'] == 'food']['amount'].sum(),
+            'transport': '',#df[df['label'] == 'transport']['amount'].sum(),
+        }
+    }
+
+    return render_template('budget.html', budget_data=budget_data)
+
+
+    
+
 
 if __name__ == '__main__':
     flask_thread = threading.Thread(target=lambda: app.run(host='0.0.0.0', port=5001))
     flask_thread.start()
     
-    # Starta CLI för att hantera kommandon i terminalen
-    command_line_interface()

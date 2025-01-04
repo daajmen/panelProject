@@ -1,0 +1,56 @@
+import psycopg2
+from psycopg2 import sql
+from sql_money import get_connection
+
+def create_database(db_name):
+    try:
+        # Anslut till PostgreSQL som superuser (postgres)
+        conn = psycopg2.connect(
+            dbname="postgres",  # Anslut till den befintliga "postgres"-databasen
+            user="postgres",
+            password="",  # Ändra till ditt lösenord
+            host="192.168.50.16",
+            port=5432
+
+        )
+        conn.autocommit = True  # Krävs för att skapa databaser
+        cursor = conn.cursor()
+
+        # SQL för att skapa databasen
+        cursor.execute(sql.SQL("CREATE DATABASE {}").format(sql.Identifier(db_name)))
+
+        print(f"Databasen {db_name} skapades!")
+    except Exception as e:
+        print(f"Ett fel uppstod: {e}")
+    finally:
+        if conn:
+            cursor.close()
+            conn.close()
+
+
+def create_table():
+    try:
+        with get_connection('household_2024') as conn:
+            with conn.cursor() as cursor:
+                # Skapar tabellen household_2024
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS household_2024 (
+                        id SERIAL PRIMARY KEY,
+                        date DATE NOT NULL,
+                        label TEXT NOT NULL,
+                        person TEXT NOT NULL,
+                        description TEXT NOT NULL,
+                        amount NUMERIC NOT NULL
+                    );
+                ''')
+                conn.commit()
+                print("Tabellen household_2024 skapades eller existerar redan.")
+    except Exception as e:
+        print(f"Ett fel uppstod: {e}")
+
+# Kör funktionen för att skapa tabellen
+create_table()
+
+
+# Skapa databasen "household_2024"
+#create_database("household_2024")
