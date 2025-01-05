@@ -121,7 +121,7 @@ def budget():
     # Summera totals och kategorier
     total_income = df[df['label'] == 'income']['amount'].sum()
     total_mortgage = df[df['label'] == 'mortgage']['amount'].sum()
-    #total_insurance = df[df['label'] == 'insurance']['amount'].sum()
+    total_electricity = df[df['label'] == 'electricity']['amount'].sum()
     #total_waterbill = df[df['label'] == 'waterbill']['amount'].sum()
 
     # Strukturera data
@@ -133,6 +133,7 @@ def budget():
         'categories': {
             'income': total_income,
             'mortgage': total_mortgage,
+            'electricity': total_electricity,
             'insurance': '',#total_insurance,
             'waterbill': '',#total_waterbill,
             'food': '',#df[df['label'] == 'food']['amount'].sum(),
