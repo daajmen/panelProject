@@ -125,21 +125,44 @@ def budget():
     total_insurance = df[df['label'] == 'insurance']['amount'].sum()
     total_transport = df[df['label'] == 'transport']['amount'].sum()
     total_waterbill = df[df['label'] == 'waterbill']['amount'].sum()
+    total_network_services = df[df['label'] == 'network_services']['amount'].sum()
+
 
     # Strukturera data
     budget_data = {
         'totals': {
             'income': total_income,
-            'expenses': total_mortgage + total_electricity + total_insurance + total_transport + total_waterbill
+            'expenses': total_mortgage + total_electricity + total_insurance + total_transport + total_waterbill + total_network_services
         },
         'categories': {
-            'income': total_income,
-            'mortgage': total_mortgage,
-            'electricity': total_electricity,
-            'insurance': total_insurance,
-            'waterbill': total_waterbill,
-            'food': '',#df[df['label'] == 'food']['amount'].sum(),
-            'transport': total_transport,
+            'mortgage': {
+                'amount': total_mortgage,
+                'percentage': (total_mortgage / total_income) * 100 if total_income else 0
+            },
+            'electricity': {
+                'amount': total_electricity,
+                'percentage': (total_electricity / total_income) * 100 if total_income else 0
+            },
+            'insurance': {
+                'amount': total_insurance,
+                'percentage': (total_insurance / total_income) * 100 if total_income else 0
+            },
+            'waterbill': {
+                'amount': total_waterbill,
+                'percentage': (total_waterbill / total_income) * 100 if total_income else 0
+            },
+            'food': {
+                'amount': df[df['label'] == 'food']['amount'].sum() or 0,
+                'percentage': ((df[df['label'] == 'food']['amount'].sum() or 0) / total_income) * 100 if total_income else 0
+            },
+            'transport': {
+                'amount': total_transport,
+                'percentage': (total_transport / total_income) * 100 if total_income else 0
+            },
+            'network_services': {
+                'amount': total_network_services,
+                'percentage': (total_network_services / total_income) * 100 if total_income else 0
+            }
         }
     }
 

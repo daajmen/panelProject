@@ -24,6 +24,7 @@
             <option value="waterbill">Vattenräkning</option>
             <option value="food">Mat</option>
             <option value="transport">Transport</option>
+            <option value="network_services">Bredband & telefoni</option>
         </select><br>
 
         <label for="person">Person:</label>
@@ -52,8 +53,8 @@
     <div>
         <h2>Kategorier</h2>
         <ul>
-            {% for category, amount in budget_data.categories.items() %}
-                <li>{{ category | capitalize }}: {{ amount }} SEK</li>
+            {% for category, data in budget_data.categories.items() %}
+                <li>{{ category | capitalize }}: {{ data.amount }} SEK ({{ data.percentage | round(1) }}%)</li>
             {% endfor %}
         </ul>
     </div>
@@ -68,14 +69,19 @@
     <script>
         // Data för pie chart från servern
         const budgetData = {
-            labels: Object.keys({{ budget_data.categories | tojson }}),
-            values: Object.values({{ budget_data.categories | tojson }})
+        labels: Object.keys(JSON.parse('{{ budget_data.categories | tojson }}')),
+        values: Object.values(JSON.parse('{{ budget_data.categories | tojson }}'))
         };
 
-        // Skapa pie chart
-        const ctx = document.getElementById('budgetChart').getContext('2d');
+
+    
+        // Hämta referens till canvas korrekt
+        const canvas = document.getElementById('budgetChart');
+    
+        // Skapa doughnut chart
+        const ctx = canvas.getContext('2d');
         new Chart(ctx, {
-            type: 'pie',
+            type: 'doughnut', // Doughnut chart
             data: {
                 labels: budgetData.labels,
                 datasets: [{
@@ -92,6 +98,7 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true, // Bevara proportionerna
                 plugins: {
                     legend: {
                         position: 'top',
@@ -99,13 +106,35 @@
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return context.label + ': ' + context.raw + ' SEK';
+                                const totalExpenses = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0); // Endast utgifter
+                                const percentage = ((context.raw / totalExpenses) * 100).toFixed(1);
+                                return `${context.label}: ${context.raw} SEK (${percentage}%)`;
                             }
                         }
                     }
                 }
-            }
+            },
+            plugins: [{
+                id: 'doughnutLabels',
+                beforeDraw: function(chart) {
+                    const width = chart.width;
+                    const height = chart.height;
+                    const ctx = chart.ctx;
+                    ctx.restore();
+                    const fontSize = (height / 10).toFixed(2); // Anpassa storlek till canvas
+                    ctx.font = `${fontSize}px sans-serif`;
+                    ctx.textBaseline = 'middle';
+    
+                    const text = '';
+                    const textX = Math.round((width - ctx.measureText(text).width) / 2);
+                    const textY = height / 2;
+    
+                    ctx.fillStyle = '#666';
+                    ctx.fillText(text, textX, textY);
+                    ctx.save();
+                }
+            }]
         });
     </script>
-</body>
+        </body>
 </html>
