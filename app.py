@@ -124,19 +124,20 @@ def budget():
     total_electricity = df[df['label'] == 'electricity']['amount'].sum()
     total_insurance = df[df['label'] == 'insurance']['amount'].sum()
     total_transport = df[df['label'] == 'transport']['amount'].sum()
+    total_waterbill = df[df['label'] == 'waterbill']['amount'].sum()
 
     # Strukturera data
     budget_data = {
         'totals': {
             'income': total_income,
-            'expenses': total_mortgage + total_electricity + total_insurance + total_transport
+            'expenses': total_mortgage + total_electricity + total_insurance + total_transport + total_waterbill
         },
         'categories': {
             'income': total_income,
             'mortgage': total_mortgage,
             'electricity': total_electricity,
             'insurance': total_insurance,
-            'waterbill': '',#total_waterbill,
+            'waterbill': total_waterbill,
             'food': '',#df[df['label'] == 'food']['amount'].sum(),
             'transport': total_transport,
         }
