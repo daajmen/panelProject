@@ -75,12 +75,6 @@
                         {{ account_data.latest_buffert }} kr
                     </span>
                 </p>
-                <p>
-                    <strong>Medelvärde (7 dagar):</strong> 
-                    <span class="{{ 'positive' if account_data.buffert_avg >= 0 else 'negative' }}">
-                        {{ account_data.buffert_avg }} kr
-                    </span>
-                </p>
             </div>
             <div class="account">
                 <h3>Matkonto</h3>
@@ -91,10 +85,7 @@
                     </span>
                 </p>
                 <p>
-                    <strong>Medelvärde (7 dagar):</strong> 
-                    <span class="{{ 'positive' if account_data.matkonto_avg >= 0 else 'negative' }}">
-                        {{ account_data.matkonto_avg }} kr
-                    </span>
+                    <strong>Antal dagar kvar till lön: {{ account_data.days_left }} | {{ account_data.money_left }} kr per dag </strong> 
                 </p>
             </div>
                         <div class="calendar-widget">

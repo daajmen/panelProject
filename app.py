@@ -19,7 +19,7 @@ def home():
     lunch_week = fetch_skolmat() or {}
     electric_price = fetch_value('sensor.furulundsvagen_5a_elpris')
     hanna_carBattery = fetch_value('sensor.battery_level')
-    matkonto_avg, buffert_avg, latest_matkonto, latest_buffert = calculate_last_7_days()
+    latest_matkonto, latest_buffert, days_left, money_left = calculate_last_7_days()
     
     return render_template('index.html',week_data=week_data, 
         weather_data= {'current_temp': daily_weather.current_temp,
@@ -40,10 +40,10 @@ def home():
         elpris = {'actual_price' : electric_price},
         hanna_bil = {'battery' : hanna_carBattery},
         account_data = {
-            'matkonto_avg': matkonto_avg,
-            'buffert_avg': buffert_avg,
             'latest_matkonto': latest_matkonto,
-            'latest_buffert': latest_buffert
+            'latest_buffert': latest_buffert,
+            'days_left': days_left,
+            'money_left': money_left
         })
 
 @app.route('/debug', methods=['GET', 'POST'])

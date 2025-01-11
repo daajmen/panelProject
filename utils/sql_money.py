@@ -74,6 +74,28 @@ def get_household_data() -> pd.DataFrame:
 
 
 def calculate_last_7_days(): 
+
+    def days_until_25th():
+        today = datetime.now().date()
+        current_year = today.year
+        current_month = today.month
+
+        # Datum för den 25:e i den aktuella månaden
+        target_date = datetime(current_year, current_month, 25).date()
+
+        # Om dagens datum är efter den 25:e, räkna ut dagar till nästa månads 25:e
+        if today > target_date:
+            if current_month == 12:
+                # Om det är december, gå till januari nästa år
+                target_date = datetime(current_year + 1, 1, 25).date()
+            else:
+                # Annars gå till nästa månad
+                target_date = datetime(current_year, current_month + 1, 25).date()
+
+        days_left = (target_date - today).days
+        return days_left
+
+
     conn = get_connection('account_balance')
     cursor = conn.cursor()
 
@@ -88,14 +110,6 @@ def calculate_last_7_days():
     ''', (seven_days_ago, today))
     rows = cursor.fetchall()
 
-    # Beräkna medelvärde
-    matkonto_values = [row[0] for row in rows if row[0] is not None]
-    buffert_values = [row[1] for row in rows if row[1] is not None]
-
-    matkonto_avg = sum(matkonto_values) / len(matkonto_values) if matkonto_values else 0
-    buffert_avg = sum(buffert_values) / len(buffert_values) if buffert_values else 0    
-
-
     # Hämta det senaste värdet
     cursor.execute('''
         SELECT matkonto, buffert
@@ -103,11 +117,12 @@ def calculate_last_7_days():
         ORDER BY datum DESC
         LIMIT 1
     ''')
+
     latest_row = cursor.fetchone()
     latest_matkonto = latest_row[0] if latest_row and latest_row[0] is not None else 0
     latest_buffert = latest_row[1] if latest_row and latest_row[1] is not None else 0
-
-    cursor.close()
+    days_left = days_until_25th()
+    money_left = round(latest_matkonto / days_left, 2) if days_left > 0 else 0
     conn.close()
 
-    return round(matkonto_avg,2), round(buffert_avg,2), latest_matkonto, latest_buffert
+    return latest_matkonto, latest_buffert, days_left, money_left
