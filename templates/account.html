@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Kontobalans</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>    
 </head>
 <body>
     <h1>Kontobalans</h1>
@@ -31,7 +32,8 @@
         const labels = data.map(item => item[0]); // Datum
         const matkonto = data.map(item => item[1]); // Matkonto
         const buffert = data.map(item => item[2]); // Buffert
-
+        const total = data.map(item => Number((Number(item[1]) + Number(item[2])).toFixed(2))); // Total avrundat till 2 decimaler
+        
         // Sätt dagens datum som standardvärde
         document.getElementById('date').valueAsDate = new Date();
         const ctx = document.getElementById('balanceChart').getContext('2d');
@@ -41,19 +43,29 @@
                 labels: labels,
                 datasets: [
                     {
-                        label: 'Matkonto',
+                        label: `Matkonto (Senaste: ${matkonto[matkonto.length - 1]} kr)`,
                         data: matkonto,
                         borderColor: 'blue',
                         fill: false,
-                        spanGaps: true // Hoppa över NULL-värden
+                        spanGaps: true, // Hoppa över NULL-värden
+                        hidden: true 
                     },
                     {
-                        label: 'Buffert',
+                        label: `Buffert (Senaste: ${buffert[buffert.length - 1]} kr)`,
                         data: buffert,
                         borderColor: 'green',
                         fill: false,
-                        spanGaps: true // Hoppa över NULL-värden
-                    }
+                        spanGaps: true, // Hoppa över NULL-värden
+                        hidden: true
+                    },
+                    {
+                        label: `Totalt (Senaste: ${total[total.length - 1]} kr)`,
+                        data: total,
+                        borderColor: 'purple',
+                        fill: false,
+                        spanGaps: true, // Hoppa över NULL-värden
+                        hidden: false
+                    }                    
                 ]
             },
             options: {
@@ -61,8 +73,16 @@
                 scales: {
                     x: { title: { display: true, text: 'Datum' } },
                     y: { title: { display: true, text: 'Saldo (SEK)' } }
+                },
+                plugins: {
+                    datalabels: {
+                        display: true,
+                        align: 'top',
+                        formatter: (value, context) => value
+                    }
                 }
-            }
+            },
+            plugins: [ChartDataLabels]
         });
     </script>
 </body>
