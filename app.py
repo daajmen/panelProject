@@ -5,7 +5,7 @@ from utils.API_tools import fetchCalendar, fetchHourlyWeather, activate_script,f
 from adb_scheduler import start_adb_scheduler  # Importera din ADB-logik
 from utils.handlerSQL import fetch_database, fetch_healthresults  # Importera SQL-logiken från handlerSQL.py
 from utils.sql_receipt_handler import present_data
-from utils.api_skolmaten import fetch_skolmat
+from utils.rss_skolmaten import fetch_skolmat
 from utils.sql_money import insert_accountbalance, create_database, get_connection, calculate_last_7_days, insert_household, get_household_data
 
 app = Flask(__name__)
@@ -31,11 +31,11 @@ def home():
                       'sleep_status': health_data.sleep_status, 
                       'private_status': health_data.private_status},
         lunch= {
-            'måndag': lunch_week.get('rätt_1', 'Ingen information'),
-            'tisdag': lunch_week.get('rätt_2', 'Ingen information'),
-            'onsdag': lunch_week.get('rätt_3', 'Ingen information'),
-            'torsdag': lunch_week.get('rätt_4', 'Ingen information'),
-            'fredag': lunch_week.get('rätt_5', 'Ingen information')},
+            'måndag': lunch_week[0].description,
+            'tisdag': lunch_week[1].description,
+            'onsdag': lunch_week[2].description,
+            'torsdag': lunch_week[3].description,
+            'fredag': lunch_week[4].description},
 
         elpris = {'actual_price' : electric_price},
         hanna_bil = {'battery' : hanna_carBattery},
