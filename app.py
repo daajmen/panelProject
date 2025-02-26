@@ -1,12 +1,13 @@
 import threading
 import pandas as pd 
 from flask import Flask, render_template, request
-from utils.API_tools import fetchCalendar, fetchHourlyWeather, activate_script,fetch_value
+from utils.API_tools import fetchCalendar, fetchHourlyWeather, activate_script, fetch_value, notify_with_tibber
 from adb_scheduler import start_adb_scheduler  # Importera din ADB-logik
 from utils.handlerSQL import fetch_database, fetch_healthresults  # Importera SQL-logiken från handlerSQL.py
 from utils.sql_receipt_handler import present_data
 from utils.rss_skolmaten import fetch_skolmat
 from utils.sql_money import insert_accountbalance, create_database, get_connection, calculate_last_7_days, insert_household, get_household_data
+from utils.charge_reminder import remind_user_to_charge
 
 app = Flask(__name__)
 
@@ -21,6 +22,7 @@ def home():
     hanna_carBattery = fetch_value('sensor.battery_level')
     latest_matkonto, latest_buffert, days_left, money_left = calculate_last_7_days()
     
+
     return render_template('index.html',week_data=week_data, 
         weather_data= {'current_temp': daily_weather.current_temp,
                         'max_temp': daily_weather.max_temp,
@@ -45,6 +47,7 @@ def home():
             'days_left': days_left,
             'money_left': money_left
         })
+
 
 @app.route('/debug', methods=['GET', 'POST'])
 def debug():
@@ -175,4 +178,6 @@ def budget():
 if __name__ == '__main__':
     flask_thread = threading.Thread(target=lambda: app.run(host='0.0.0.0', port=5001))
     flask_thread.start()
-    
+
+    charge_thread = threading.Thread(target=remind_user_to_charge)
+    charge_thread.start()    

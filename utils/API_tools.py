@@ -154,3 +154,18 @@ def fetch_value(entity):
         return data['state']
     else: 
         print('failed.')
+
+def notify_with_tibber(message): 
+
+    url = "http://192.168.50.11:8123/api/services/notify/tibber"
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "content-type": "application/json",
+    }
+    data = {
+        "message": message,
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+
+

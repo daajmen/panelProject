@@ -9,9 +9,3 @@ def fetch_skolmat():
         entry.description = re.sub(r'<br\s*/?>', ' || ', entry.description)  # Ersätter <br> eller <br /> med mellanslag
 
     return feed.entries
-
-
-
-data = fetch_skolmat() 
-print(data[0].title)
-print(data[0].description)
