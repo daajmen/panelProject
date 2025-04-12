@@ -4,7 +4,7 @@ from secret import API_KEY
 
 
 def fetchCalendar(): 
-    url = "http://192.168.50.11:8123/api/calendars/calendar.hanna_alex_bastisar"
+    url = "http://192.168.50.16:8123/api/calendars/calendar.hanna_alex_bastisar"
 
     # Hämta dagens datum
     today = datetime.datetime.utcnow()
@@ -86,7 +86,7 @@ class DailyWeather:
 
 
 def fetchHourlyWeather():
-    url = "http://192.168.50.11:8123/api/services/weather/get_forecasts?return_response=true"
+    url = "http://192.168.50.16:8123/api/services/weather/get_forecasts?return_response=true"
     headers = {
         "Authorization": f"Bearer {API_KEY}",
         "content-type": "application/json",
@@ -123,7 +123,7 @@ def fetchHourlyWeather():
 
 def activate_script(script_to_run):
 
-    url = "http://192.168.50.11:8123/api/services/script/turn_on"
+    url = "http://192.168.50.16:8123/api/services/script/turn_on"
     headers = {
         "Authorization": f"Bearer {API_KEY}",
         "content-type": "application/json",
@@ -141,7 +141,7 @@ def activate_script(script_to_run):
 
 def fetch_value(entity):
 
-    url = f"http://192.168.50.11:8123/api/states/{entity}"
+    url = f"http://192.168.50.16:8123/api/states/{entity}"
     headers = {
         "Authorization": f"Bearer {API_KEY}",
         "content-type": "application/json",
@@ -157,7 +157,7 @@ def fetch_value(entity):
 
 def notify_with_tibber(message): 
 
-    url = "http://192.168.50.11:8123/api/services/notify/tibber"
+    url = "http://192.168.50.16:8123/api/services/notify/tibber"
     headers = {
         "Authorization": f"Bearer {API_KEY}",
         "content-type": "application/json",

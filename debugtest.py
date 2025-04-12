@@ -5,7 +5,7 @@ from secret import API_KEY
 
 def fetchHourlyWeather():
     # URL för att hämta väderdata från Home Assistant API
-    url = "http://192.168.50.11:8123/api/services/weather/get_forecasts?return_response=true"
+    url = "http://192.168.50.16:8123/api/services/weather/get_forecasts?return_response=true"
 
     # Din Long-lived access token för autentisering
     headers = {
